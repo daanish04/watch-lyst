@@ -33,3 +33,12 @@ cd watch-lyst
 npm install
 npm run dev
 ```
+
+---
+
+## 🔮 Future Goals
+
+- 🤖 **AI Integration** – Generate automatic summaries for playlists and individual videos using AI.
+- 🔍 **Smart Filtering** – Recommend videos based on viewing history or content type.
+
+---
