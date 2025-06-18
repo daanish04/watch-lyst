@@ -9,7 +9,7 @@ export default function ThemeToggle() {
       {/* Theme Toggle Button */}
       <button
         onClick={toggleTheme}
-        className="p-3 bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg rounded-full shadow-lg border border-white/20 dark:border-gray-700/20 hover:scale-110 transition-all duration-300 group"
+        className="p-3 bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg rounded-full shadow-lg border border-white/20 dark:border-gray-700/20 hover:scale-110 transition-all duration-300 group hover:shadow-glow dark:hover:shadow-glow-dark"
         aria-label="Toggle theme"
       >
         <div className="relative w-6 h-6">
@@ -28,6 +28,9 @@ export default function ThemeToggle() {
             }`}
           />
         </div>
+        <span className="sr-only">
+          {isDark ? "Switch to light mode" : "Switch to dark mode"}
+        </span>
       </button>
     </div>
   );

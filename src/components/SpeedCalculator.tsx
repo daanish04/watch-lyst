@@ -30,9 +30,12 @@ export default function SpeedCalculator({
   const customSpeedCalc = calculateSpeedDuration(totalDuration, customSpeed);
 
   return (
-    <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg rounded-xl shadow-lg border border-white/20 dark:border-gray-700/20 p-6 transition-colors duration-300">
+    <div
+      className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-lg rounded-xl shadow-lg hover:shadow-xl border border-white/30 dark:border-gray-700/30 p-6 transition-all duration-300 animate-scale opacity-0"
+      style={{ animationDelay: "400ms" }}
+    >
       <div className="flex items-center mb-6">
-        <div className="bg-gradient-to-r from-purple-700 to-pink-600 dark:from-purple-500 dark:to-fuchsia-600 rounded-full p-2 mr-3">
+        <div className="bg-gradient-to-r from-purple-600 to-pink-600 dark:from-purple-500 dark:to-fuchsia-500 rounded-full p-2 mr-3 shadow-md">
           <Gauge className="h-5 w-5 text-white" />
         </div>
         <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100">
@@ -45,10 +48,10 @@ export default function SpeedCalculator({
         {predefinedSpeeds.map((speed) => (
           <div
             key={speed.speed}
-            className={`p-4 rounded-lg border-2 transition-all duration-200 ${
+            className={`p-4 rounded-lg border-2 transition-all duration-200 transform hover:scale-[1.03] hover:shadow-md ${
               speed.speed === 1
-                ? "border-blue-200 dark:border-blue-700 bg-blue-50 dark:bg-blue-900/30"
-                : "border-purple-200 dark:border-purple-700 bg-purple-50 dark:bg-purple-900/30 hover:border-purple-300 dark:hover:border-purple-600"
+                ? "border-blue-200 dark:border-blue-700 bg-blue-50/80 dark:bg-blue-900/30"
+                : "border-purple-200 dark:border-purple-700 bg-purple-50/80 dark:bg-purple-900/30 hover:border-purple-300 dark:hover:border-purple-600"
             }`}
           >
             <div className="text-center">
@@ -83,7 +86,7 @@ export default function SpeedCalculator({
       </div>
 
       {/* Custom Speed */}
-      <div className="bg-gradient-to-r from-orange-50 to-red-50 dark:from-orange-900/30 dark:to-red-900/30 rounded-lg p-4 border border-orange-200 dark:border-orange-800">
+      <div className="bg-gradient-to-r from-orange-50/90 to-red-50/90 dark:from-orange-900/20 dark:to-red-900/20 rounded-lg p-4 border border-orange-200/50 dark:border-orange-800/50 shadow-sm hover:shadow-md transition-all duration-300">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-3 sm:space-y-0">
           <div className="flex items-center space-x-3">
             <label className="text-sm font-semibold text-gray-700 dark:text-gray-200">
@@ -107,7 +110,7 @@ export default function SpeedCalculator({
             </div>
           </div>
 
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center space-x-2 bg-white/50 dark:bg-gray-800/50 px-3 py-1 rounded-full shadow-sm">
             <Zap className="h-4 w-4 text-orange-600 dark:text-orange-400" />
             <span className="font-semibold text-orange-700 dark:text-orange-300">
               {customSpeedCalc.formatted}
@@ -116,23 +119,28 @@ export default function SpeedCalculator({
         </div>
 
         <div className="mt-3 text-xs text-gray-600 dark:text-gray-400">
-          <p>💡 Tip: Most people can comfortably watch at 1.25x-1.5x speed</p>
+          <p className="flex items-center">
+            <span className="inline-block mr-1">💡</span>
+            Tip: Most people can comfortably watch at 1.25x-1.5x speed
+          </p>
         </div>
       </div>
 
       {/* Time Saved */}
-      <div className="mt-4 p-3 bg-green-50 dark:bg-green-900/30 rounded-lg border border-green-200 dark:border-green-800">
+      <div className="mt-4 p-3 bg-green-50/90 dark:bg-green-900/20 rounded-lg border border-green-200/50 dark:border-green-800/50 shadow-sm hover:shadow-md transition-all duration-300">
         <div className="text-center">
-          <p className="text-sm text-green-700 dark:text-green-300">
+          <p className="text-sm text-green-700 dark:text-green-300 font-medium">
             <span className="font-semibold">
               Time saved at {customSpeed}x speed:{" "}
             </span>
-            {
-              calculateSpeedDuration(
-                totalDuration - customSpeedCalc.duration,
-                1
-              ).formatted
-            }
+            <span className="bg-white/50 dark:bg-gray-800/50 px-2 py-0.5 rounded-md ml-1 inline-block">
+              {
+                calculateSpeedDuration(
+                  totalDuration - customSpeedCalc.duration,
+                  1
+                ).formatted
+              }
+            </span>
           </p>
         </div>
       </div>

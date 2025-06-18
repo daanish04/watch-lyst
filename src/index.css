@@ -4,6 +4,66 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --toast-bg: rgba(255, 255, 255, 0.9);
+  --toast-color: #1f2937;
+  --toast-border: rgba(255, 255, 255, 0.2);
+}
+
+.dark {
+  --toast-bg: rgba(31, 41, 55, 0.9);
+  --toast-color: #f3f4f6;
+  --toast-border: rgba(55, 65, 81, 0.3);
+}
+
 body {
   font-family: "Inter", sans-serif;
+  @apply bg-white dark:bg-neutral-900 transition-colors duration-300;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-gray-100 dark:bg-gray-800 rounded-full;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-gray-300 dark:bg-gray-600 rounded-full hover:bg-gray-400 dark:hover:bg-gray-500 transition-colors duration-200;
+}
+
+/* Smooth transitions for all theme changes */
+* {
+  @apply transition-colors duration-200;
+}
+
+/* Shimmer effect for loading states */
+.shimmer {
+  @apply bg-gradient-to-r from-transparent via-white/20 to-transparent bg-[length:200%_100%] animate-shimmer;
+}
+
+/* Focus styles */
+*:focus-visible {
+  @apply outline-none ring-2 ring-primary-500 dark:ring-primary-400 ring-offset-2 dark:ring-offset-gray-800;
+}
+
+/* Button hover effects */
+button:not(:disabled):hover,
+a:hover {
+  @apply transform transition-all duration-200;
+}
+
+/* Improved focus for accessibility */
+input:focus,
+select:focus,
+textarea:focus {
+  @apply ring-2 ring-primary-500 dark:ring-primary-400 ring-offset-1 dark:ring-offset-gray-800 outline-none;
+}
+
+/* Improved selection color */
+::selection {
+  @apply bg-primary-200 dark:bg-primary-800 text-primary-900 dark:text-primary-100;
 }
