@@ -5,11 +5,11 @@
       "src": "api/index.js",
       "use": "@vercel/node",
       "config": {
-        "includeFiles": ["api/package.json", "api/node_modules/**"]
+        "includeFiles": ["api/node_modules/**"]
       }
     },
     {
-      "src": "index.html",
+      "src": "package.json",
       "use": "@vercel/static-build",
       "config": { "distDir": "dist" }
     }
