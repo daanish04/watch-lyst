@@ -4,29 +4,33 @@ import dotenv from "dotenv";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
 dotenv.config();
-
-const PORT = process.env.PORT || 4000;
 const app = express();
+const PORT = process.env.PORT || 4000;
 
-// Configure CORS for Vercel deployment.
-// In production, ensure this only allows requests from your Vercel frontend domain.
-const allowedOrigins = process.env.VERCEL_URL
-  ? [
-      `https://${process.env.VERCEL_URL}`,
-      `https://${process.env.VERCEL_URL.replace("https://", "")}`,
-    ]
-  : ["http://localhost:3000", "http://localhost:5173"]; // Add your frontend development server URLs here
+const allowedOrigins = ["http://localhost:3000", "http://localhost:5173"];
+
+if (process.env.VERCEL_URL) {
+  // process.env.VERCEL_URL typically comes as 'your-app-name.vercel.app'
+  // The origin sent by the browser will include the protocol.
+  allowedOrigins.push(`https://${process.env.VERCEL_URL}`);
+}
 
 app.use(
   cors({
     origin: function (origin, callback) {
-      if (!origin) return callback(null, true); // Allow requests with no origin (e.g., direct API calls)
-      if (allowedOrigins.indexOf(origin) === -1) {
-        const msg =
-          "The CORS policy for this site does not allow access from the specified Origin.";
-        return callback(new Error(msg), false);
+      // Allow requests with no origin (like direct API calls, Postman, curl)
+      // or requests from the explicitly allowed origins.
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        console.warn(`CORS blocked request from origin: ${origin}`);
+        callback(
+          new Error(
+            "The CORS policy for this site does not allow access from the specified Origin."
+          ),
+          false
+        );
       }
-      return callback(null, true);
     },
     credentials: true,
   })
