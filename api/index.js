@@ -7,35 +7,7 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 4000;
 
-const allowedOrigins = ["http://localhost:3000", "http://localhost:5173"];
-
-if (process.env.VERCEL_URL) {
-  // process.env.VERCEL_URL typically comes as 'your-app-name.vercel.app'
-  // The origin sent by the browser will include the protocol.
-  allowedOrigins.push(`https://${process.env.VERCEL_URL}`);
-}
-
-app.use(
-  cors({
-    origin: function (origin, callback) {
-      // Allow requests with no origin (like direct API calls, Postman, curl)
-      // or requests from the explicitly allowed origins.
-      if (!origin || allowedOrigins.includes(origin)) {
-        callback(null, true);
-      } else {
-        console.warn(`CORS blocked request from origin: ${origin}`);
-        callback(
-          new Error(
-            "The CORS policy for this site does not allow access from the specified Origin."
-          ),
-          false
-        );
-      }
-    },
-    credentials: true,
-  })
-);
-
+app.use(cors());
 app.use(express.json({ limit: "50mb" }));
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
