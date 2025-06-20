@@ -16,7 +16,11 @@
     "react-markdown": "^10.1.0",
     "remark-gfm": "^4.0.1",
     "sonner": "^2.0.5",
-    "xlsx": "^0.18.5"
+    "xlsx": "^0.18.5",
+    "@google/generative-ai": "^0.24.1",
+    "cors": "^2.8.5",
+    "dotenv": "^16.5.0",
+    "express": "^5.1.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.9.1",

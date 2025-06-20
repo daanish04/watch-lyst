@@ -5,14 +5,36 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 
 dotenv.config();
 
-const app = express();
 const PORT = process.env.PORT || 4000;
+const app = express();
 
-app.use(cors());
-app.use(express.json());
+// Configure CORS for Vercel deployment.
+// In production, ensure this only allows requests from your Vercel frontend domain.
+const allowedOrigins = process.env.VERCEL_URL
+  ? [
+      `https://${process.env.VERCEL_URL}`,
+      `https://${process.env.VERCEL_URL.replace("https://", "")}`,
+    ]
+  : ["http://localhost:3000", "http://localhost:5173"]; // Add your frontend development server URLs here
+
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      if (!origin) return callback(null, true); // Allow requests with no origin (e.g., direct API calls)
+      if (allowedOrigins.indexOf(origin) === -1) {
+        const msg =
+          "The CORS policy for this site does not allow access from the specified Origin.";
+        return callback(new Error(msg), false);
+      }
+      return callback(null, true);
+    },
+    credentials: true,
+  })
+);
+
+app.use(express.json({ limit: "50mb" }));
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-
 const MODEL_NAME = "gemini-2.0-flash";
 
 /**
@@ -63,7 +85,6 @@ Now, provide a summary:`;
 app.post("/api/summarize", async (req, res) => {
   try {
     const { videos } = req.body;
-    // Validate input: 'videos' must be a non-empty array
     if (!videos || !Array.isArray(videos) || videos.length === 0) {
       return res.status(400).json({
         error:
@@ -86,7 +107,12 @@ app.post("/api/summarize", async (req, res) => {
   }
 });
 
-// Start the Express server
-app.listen(PORT, () => {
-  console.log(`Playlist summarizer backend running on port ${PORT}`);
-});
+// Conditional listen statement for local development
+if (process.env.NODE_ENV !== "production") {
+  app.listen(PORT, () => {
+    console.log(`Playlist summarizer backend running on port ${PORT}`);
+  });
+}
+
+// IMPORTANT: Export the app for Vercel's serverless function environment
+export default app;

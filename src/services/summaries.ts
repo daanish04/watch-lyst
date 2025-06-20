@@ -4,10 +4,9 @@ interface Video {
 }
 export async function getPlaylistSummary(videos: Video[]): Promise<string> {
   try {
-    // The URL for your backend's summarization endpoint
-    const backendUrl = "http://localhost:4000/api/summarize";
+    // The URL for the backend's summarization endpoint
+    const backendUrl = "/api/summarize";
 
-    // Prepare the data to be sent to the backend.
     // We only send 'title' and 'description' as required by the backend.
     const videosToSend = videos.map((video) => ({
       title: video.title,
@@ -19,12 +18,11 @@ export async function getPlaylistSummary(videos: Video[]): Promise<string> {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ videos: videosToSend }), // Send the videos array in the body
+      body: JSON.stringify({ videos: videosToSend }),
     });
 
-    // Check if the response was successful (status code 2xx)
+    // Check if the response was successful
     if (!response.ok) {
-      // If not successful, parse the error message from the backend (if available)
       const errorData = await response.json();
       throw new Error(
         errorData.error || `HTTP error! Status: ${response.status}`
