@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Clock,
   Video,
@@ -11,11 +11,16 @@ import {
   MoveUpRight,
   ArrowLeft,
   ArrowRight,
+  Loader2,
+  Brain,
 } from "lucide-react";
 import { YouTubePlaylist, PlaylistStats } from "../types/youtube";
 import { formatDuration, formatLargeDuration } from "../services/youtube";
 import { exportToExcel } from "../services/excelExport";
 import SpeedCalculator from "./SpeedCalculator";
+import { getPlaylistSummary } from "../services/summaries";
+import { toast } from "sonner";
+import PlaylistSummaryDrawer from "./PlaylistSummaryDrawer";
 
 interface PlaylistResultsProps {
   playlist: YouTubePlaylist;
@@ -29,6 +34,10 @@ export default function PlaylistResults({ playlist }: PlaylistResultsProps) {
   );
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
   const [currentPage, setCurrentPage] = useState(1);
+  const [summary, setSummary] = useState("");
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const [summaryLoading, setSummaryLoading] = useState(false);
+
   const itemsPerPage = 15;
 
   const stats: PlaylistStats = {
@@ -125,8 +134,42 @@ export default function PlaylistResults({ playlist }: PlaylistResultsProps) {
 
   const duration = formatLargeDuration(playlist.totalDuration);
 
+  const handleSummary = async () => {
+    try {
+      setSummaryLoading(true);
+      const videosForSummary = playlist.videos.map((video) => ({
+        title: video.title,
+        description: video.description || "",
+      }));
+      const summary = await getPlaylistSummary(videosForSummary);
+      setSummary(summary);
+      setDrawerOpen(true);
+    } catch (err) {
+      toast.error("Error: ", err || "");
+    } finally {
+      setSummaryLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (drawerOpen) {
+      document.body.style.overflow = "hidden";
+      window.scrollTo({ top: 220, behavior: "smooth" });
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [drawerOpen]);
+
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-8">
+    <div className={`max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-8`}>
+      <PlaylistSummaryDrawer
+        summary={summary}
+        isOpen={drawerOpen}
+        onClose={() => setDrawerOpen(false)}
+      />
       {/* Playlist Header */}
       <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg rounded-2xl shadow-xl border border-white/20 dark:border-gray-700/20 overflow-hidden transition-colors duration-300">
         <div className="p-8">
@@ -161,6 +204,24 @@ export default function PlaylistResults({ playlist }: PlaylistResultsProps) {
                 <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-accent-100 dark:bg-accent-900/30 text-accent-800 dark:text-accent-200">
                   <Clock className="h-4 w-4 mr-1" />
                   {duration.formatted}
+                </span>
+                <span>
+                  <button
+                    onClick={handleSummary}
+                    className="flex justify-center items-center w-full text-primary-950 bg-secondary-400 hover:bg-secondary-500 text-sm font-medium py-1.5 px-3 rounded-lg"
+                  >
+                    {summaryLoading ? (
+                      <>
+                        <span>Analyzing...</span>
+                        <Loader2 className="ml-2 h-5 w-5 animate-spin" />
+                      </>
+                    ) : (
+                      <>
+                        <span>Summarize using AI</span>
+                        <Brain className="ml-2 h-5 w-5" size={18} />
+                      </>
+                    )}
+                  </button>
                 </span>
               </div>
             </div>
