@@ -129,17 +129,35 @@ export default function SpeedCalculator({
       {/* Time Saved */}
       <div className="mt-4 p-3 bg-green-50/90 dark:bg-green-900/20 rounded-lg border border-green-200/50 dark:border-green-800/50 shadow-sm hover:shadow-md transition-all duration-300">
         <div className="text-center">
-          <p className="text-sm text-green-700 dark:text-green-300 font-medium">
+          <p
+            className={`text-sm ${
+              customSpeed >= 1
+                ? "text-green-700 dark:text-green-300"
+                : "text-red-600 dark:text-red-400"
+            }  font-medium`}
+          >
             <span className="font-semibold">
-              Time saved at {customSpeed}x speed:{" "}
+              Time {customSpeed >= 1 ? "saved" : "lost"} at {customSpeed}x
+              speed:{" "}
             </span>
             <span className="bg-white/50 dark:bg-gray-800/50 px-2 py-0.5 rounded-md ml-1 inline-block">
-              {
-                calculateSpeedDuration(
-                  totalDuration - customSpeedCalc.duration,
-                  1
-                ).formatted
-              }
+              {calculateSpeedDuration(
+                totalDuration - customSpeedCalc.duration,
+                1
+              ).formatted === ""
+                ? calculateSpeedDuration(
+                    customSpeedCalc.duration - totalDuration,
+                    1
+                  ).formatted === ""
+                  ? "0s"
+                  : calculateSpeedDuration(
+                      customSpeedCalc.duration - totalDuration,
+                      1
+                    ).formatted
+                : calculateSpeedDuration(
+                    totalDuration - customSpeedCalc.duration,
+                    1
+                  ).formatted}
             </span>
           </p>
         </div>
