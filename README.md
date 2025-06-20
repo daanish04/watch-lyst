@@ -13,6 +13,7 @@
 - 🌗 **Light/Dark Mode** – Theme toggle with smooth transitions.
 - 📊 **Video Insights** – View durations, publish dates, views, and links.
 - 📁 **Export** – Download playlist stats as JSON or Excel.
+- 🤖 **AI-Powered Summaries** – Get instant, detailed summaries of entire playlists using Google Gemini AI.
 
 ---
 
@@ -22,6 +23,7 @@
 - **TailwindCSS**
 - **TypeScript**
 - **HTML5**, **CSS3**, **JavaScript**
+- **Google Gemini AI**
 
 ---
 
@@ -33,12 +35,12 @@ cd watch-lyst
 npm install
 npm run dev
 ```
-
+> Remember to set your YOUTUBE_API_KEY and GEMINI_API_KEY in a .env file at the root for local development
 ---
 
 ## 🔮 Future Goals
 
-- 🤖 **AI Integration** – Generate automatic summaries for playlists and individual videos using AI.
+- 🤖 **AI Integration** – Generate automatic summaries for individual videos using AI.
 - 🔍 **Smart Filtering** – Recommend videos based on viewing history or content type.
 
 ---
