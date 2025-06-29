@@ -29,7 +29,7 @@ const generatePrompt = (videos) => {
 
   return `You are an expert YouTube content analyst.
 Given a playlist of videos, summarize it in a clear, coherent, structured, and engaging manner for users.
-Your summary should be formatted using **Markdown**.
+Your summary should be formatted using **Markdown** using proper headings, subheadings, etc so it looks professional.
 
 Please include the following sections:
 
